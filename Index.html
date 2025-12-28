@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>DPB • Monitoramento de Vazamentos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: #E5E7EB;
+}
+
+header {
+    background: #020617;
+    padding: 20px;
+    border-bottom: 2px solid #C9A24D;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+header img {
+    height: 60px;
+}
+
+header h1 {
+    font-family: 'Cinzel', serif;
+    color: #E6C46A;
+    font-size: 20px;
+}
+
+.container {
+    max-width: 480px;
+    margin: 40px auto;
+    background: #020617;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #C9A24D;
+    box-shadow: 0 0 30px rgba(0,0,0,.85);
+}
+
+h2 {
+    font-family: 'Cinzel', serif;
+    color: #E6C46A;
+    text-align: center;
+}
+
+p {
+    font-size: 14px;
+    color: #94A3B8;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: none;
+    margin-top: 10px;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background: linear-gradient(145deg, #2563eb, #1e40af);
+    border: 1px solid #C9A24D;
+    color: #fff;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1e3a8a;
+}
+
+.status {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 6px;
+    display: none;
+}
+
+.safe {
+    background: #052e16;
+    border-left: 5px solid #10b981;
+}
+
+.danger {
+    background: #450a0a;
+    border-left: 5px solid #C9A24D;
+}
+
+footer {
+    text-align: center;
+    font-size: 11px;
+    color: #94A3B8;
+    margin-top: 30px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <img src="logo.png" alt="DPB">
+    <h1>Investigador Profissional • DPB</h1>
+</header>
+
+<div class="container">
+    <h2>Verificação de Senha</h2>
+    <p>
+        Esta ferramenta verifica se a senha digitada já consta em bases públicas
+        de vazamento utilizadas em ataques automatizados.
+    </p>
+
+    <input type="password" id="password" placeholder="Digite a senha">
+    <button onclick="verificar()">Verificar Segurança</button>
+
+    <div id="status" class="status"></div>
+
+    <p style="font-size:12px;margin-top:15px;">
+        ⚠️ Esta verificação não indica que sua conta foi invadida,
+        mas que a senha já existe em listas globais de risco.
+    </p>
+</div>
+
+<footer>
+    DPB • Investigação Digital  • LGPD<br>
+    Monitoramento contínuo realizado em ambiente controlado
+</footer>
+
+<script>
+async function sha1(msg) {
+    const buf = await crypto.subtle.digest("SHA-1", new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+}
+
+async function verificar() {
+    const senha = document.getElementById("password").value;
+    const status = document.getElementById("status");
+
+    if (!senha) return alert("Digite uma senha");
+
+    const hash = await sha1(senha);
+    const prefixo = hash.substring(0,5);
+    const sufixo = hash.substring(5);
+
+    const r = await fetch(`https://api.pwnedpasswords.com/range/${prefixo}`);
+    const txt = await r.text();
+
+    let achou = false;
+    let qtd = 0;
+
+    txt.split("\n").forEach(l => {
+        const [h, c] = l.split(":");
+        if (h === sufixo) {
+            achou = true;
+            qtd = c;
+        }
+    });
+
+    status.style.display = "block";
+
+    if (achou) {
+        status.className = "status danger";
+        status.innerHTML = `🚨 <b>Senha insegura</b><br>Identificada em ${qtd} vazamentos públicos.`;
+    } else {
+        status.className = "status safe";
+        status.innerHTML = `✅ <b>Senha não localizada</b><br>Nenhum registro em bases públicas.`;
+    }
+}
+</script>
+
+</body>
+</html>
