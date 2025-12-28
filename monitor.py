@@ -1,19 +1,54 @@
-import time
+from flask import Flask, request, jsonify
 import requests
-from bs4 import BeautifulSoup
-from datetime import datetime
+import hashlib
+import os
 
-SURFACE_SOURCES = [
-    "https://pastebin.com/archive",
-    "https://paste.ee/recent"
-]
+app = Flask(__name__)
 
-def monitor_surface():
-    for url in SURFACE_SOURCES:
-        r = requests.get(url, timeout=15)
-        soup = BeautifulSoup(r.text, "html.parser")
-        print(f"[{datetime.utcnow()}] Monitorando {url}")
+def sha1_hash(senha):
+    return hashlib.sha1(senha.encode()).hexdigest().upper()
 
-while True:
-    monitor_surface()
-    time.sleep(1800)  # a cada 30 minutos
+@app.route("/api/verificar", methods=["POST"])
+def verificar():
+    data = request.json
+    senha = data.get("senha")
+
+    if not senha:
+        return jsonify({"erro": "Senha não informada"}), 400
+
+    sha1 = sha1_hash(senha)
+    prefix = sha1[:5]
+    suffix = sha1[5:]
+
+    r = requests.get(
+        f"https://api.pwnedpasswords.com/range/{prefix}",
+        timeout=10
+    )
+
+    if r.status_code != 200:
+        return jsonify({"status": "erro"})
+
+    vazada = False
+    vezes = 0
+
+    for linha in r.text.splitlines():
+        h, count = linha.split(":")
+        if h == suffix:
+            vazada = True
+            vezes = int(count)
+            break
+
+    if vazada:
+        return jsonify({
+            "status": "vazada",
+            "ocorrencias": vezes,
+            "fonte": "bases públicas conhecidas"
+        })
+
+    return jsonify({
+        "status": "nao_encontrada"
+    })
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
