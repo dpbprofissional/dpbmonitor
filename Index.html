@@ -21,16 +21,25 @@
 
     .card {
       background: rgba(10, 15, 30, 0.95);
-      border-radius: 12px;
-      padding: 25px;
+      border-radius: 14px;
+      padding: 28px;
       box-shadow: 0 0 40px rgba(0,0,0,0.6);
       border: 1px solid rgba(255,215,0,0.15);
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 18px auto;
+      max-width: 160px;
+      width: 100%;
+      height: auto;
+      filter: drop-shadow(0 0 12px rgba(212,175,55,0.35));
     }
 
     h1 {
       text-align: center;
       color: #d4af37;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       font-size: 1.5em;
     }
 
@@ -38,7 +47,7 @@
       text-align: center;
       font-size: 0.9em;
       color: #aaa;
-      margin-bottom: 25px;
+      margin-bottom: 22px;
     }
 
     input {
@@ -70,7 +79,7 @@
     }
 
     button:hover {
-      opacity: 0.9;
+      opacity: 0.92;
     }
 
     .resultado {
@@ -83,6 +92,7 @@
       border-radius: 8px;
       margin-bottom: 15px;
       font-size: 0.95em;
+      line-height: 1.5;
     }
 
     .critico {
@@ -113,12 +123,12 @@
   <div class="container">
     <div class="card">
 
+      <img src="logo.jpg" alt="DPB Monitor" class="logo" loading="lazy">
+
       <h1>DPB Monitor</h1>
       <div class="subtitle">
         Verificação investigativa em bases públicas de vazamentos
       </div>
-
-      <img src="logo.jpg" alt="DPB Monitor" loading="lazy">
 
       <input
         type="password"
