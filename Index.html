@@ -1,201 +1,221 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Monitoramento de Vazamento de Senhas</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>DPB Monitor | Verificação de Vazamento de Senhas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-    margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background: #020617;
-    color: #E5E7EB;
-}
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: radial-gradient(circle at top, #0c1324, #05080f);
+      color: #eaeaea;
+    }
 
-header {
-    text-align: center;
-    padding: 30px 15px;
-    border-bottom: 1px solid #0F172A;
-}
+    .container {
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 20px;
+    }
 
-header h1 {
-    margin: 0;
-    color: #C9A24D;
-    font-size: 22px;
-}
+    .card {
+      background: rgba(10, 15, 30, 0.95);
+      border-radius: 12px;
+      padding: 25px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.6);
+      border: 1px solid rgba(255,215,0,0.15);
+    }
 
-header p {
-    margin-top: 8px;
-    color: #94A3B8;
-    font-size: 13px;
-}
+    h1 {
+      text-align: center;
+      color: #d4af37;
+      margin-bottom: 10px;
+      font-size: 1.5em;
+    }
 
-main {
-    max-width: 720px;
-    margin: 30px auto;
-    padding: 0 15px;
-}
+    .subtitle {
+      text-align: center;
+      font-size: 0.9em;
+      color: #aaa;
+      margin-bottom: 25px;
+    }
 
-.card {
-    background: #020617;
-    border: 1px solid #0F172A;
-    border-radius: 8px;
-    padding: 20px;
-    margin-bottom: 20px;
-}
+    input {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #333;
+      background: #05080f;
+      color: #fff;
+      margin-bottom: 15px;
+    }
 
-label {
-    font-size: 13px;
-    color: #94A3B8;
-}
+    input:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
 
-input[type="password"] {
-    width: 100%;
-    margin-top: 8px;
-    padding: 12px;
-    border-radius: 6px;
-    border: 1px solid #0F172A;
-    background: #020617;
-    color: #E5E7EB;
-    font-size: 14px;
-}
+    button {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #d4af37, #b8962e);
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #000;
+    }
 
-button {
-    width: 100%;
-    margin-top: 15px;
-    padding: 12px;
-    background: #C9A24D;
-    color: #020617;
-    border: none;
-    border-radius: 6px;
-    font-weight: bold;
-    cursor: pointer;
-}
+    button:hover {
+      opacity: 0.9;
+    }
 
-button:hover {
-    opacity: 0.9;
-}
+    .resultado {
+      margin-top: 25px;
+      display: none;
+    }
 
-.status {
-    display: none;
-    margin-top: 15px;
-    padding: 14px;
-    border-radius: 6px;
-    font-size: 14px;
-}
+    .box {
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      font-size: 0.95em;
+    }
 
-.safe {
-    background: rgba(34,197,94,0.08);
-    border-left: 4px solid #22C55E;
-    color: #BBF7D0;
-}
+    .critico {
+      background: rgba(180, 30, 30, 0.15);
+      border-left: 4px solid #ff4d4d;
+    }
 
-.alert {
-    background: rgba(239,68,68,0.08);
-    border-left: 4px solid #EF4444;
-    color: #FECACA;
-}
+    .ok {
+      background: rgba(30, 150, 90, 0.15);
+      border-left: 4px solid #2ecc71;
+    }
 
-.recommendation {
-    display: none;
-    background: #020617;
-    border: 1px solid #0F172A;
-    border-left: 5px solid #C9A24D;
-    border-radius: 8px;
-    padding: 18px;
-}
+    .info {
+      background: rgba(212, 175, 55, 0.12);
+      border-left: 4px solid #d4af37;
+    }
 
-.recommendation h3 {
-    margin-top: 0;
-    font-size: 15px;
-}
-
-.recommendation p {
-    font-size: 13px;
-    color: #94A3B8;
-    line-height: 1.6;
-}
-
-footer {
-    text-align: center;
-    padding: 20px;
-    font-size: 12px;
-    color: #64748B;
-    border-top: 1px solid #0F172A;
-}
-</style>
+    .footer {
+      margin-top: 30px;
+      font-size: 0.75em;
+      color: #777;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-
-<header>
-    <h1>Monitoramento de Vazamento de Senhas</h1>
-    <p>Análise investigativa em bases públicas e fontes restritas</p>
-</header>
-
-<main>
-
-    <!-- ENTRADA -->
+  <div class="container">
     <div class="card">
-        <label for="senha">Digite a senha para análise:</label>
-        <input type="password" id="senha" placeholder="Digite a senha aqui">
-        <button onclick="analisar()">Analisar senha</button>
 
-        <div id="resultadoSeguro" class="status safe">
-            Nenhuma ocorrência encontrada em bases públicas conhecidas até o momento da verificação.
-        </div>
+      <h1>DPB Monitor</h1>
+      <div class="subtitle">
+        Verificação investigativa em bases públicas de vazamentos
+      </div>
 
-        <div id="resultadoAlerta" class="status alert">
-            Senha identificada em vazamento. Recomenda-se troca imediata.
-        </div>
+      <input
+        type="password"
+        id="senha"
+        placeholder="Digite a senha para análise"
+        autocomplete="off"
+      >
+
+      <button onclick="verificarSenha()">Verificar Senha</button>
+
+      <div id="resultado" class="resultado"></div>
+
+      <div class="footer">
+        Nenhuma senha é armazenada • Consulta segura • Uso educativo e preventivo
+      </div>
+
     </div>
+  </div>
 
-    <!-- RECOMENDAÇÕES -->
-    <div id="recomendacoes" class="recommendation">
-        <h3>🔐 Recomendações de Segurança</h3>
+  <script>
+    async function verificarSenha() {
+      const senha = document.getElementById("senha").value;
+      const resultado = document.getElementById("resultado");
 
-        <p>
-            A senha analisada não foi identificada em bases públicas de vazamento conhecidas até o momento desta
-            verificação. No entanto, isso <b>não garante ausência total de risco</b>, pois existem vazamentos recentes
-            ou bases privadas ainda não divulgadas publicamente.
-        </p>
-
-        <p>
-            Como medida <b>preventiva</b>, especialmente para serviços sensíveis como e-mail, redes sociais,
-            bancos e sistemas corporativos, recomenda-se a <b>troca periódica da senha em intervalos de 3 a 6 meses</b>,
-            ou <b>imediatamente</b> em caso de suspeita de comprometimento.
-        </p>
-
-        <p>
-            Utilize sempre <b>senhas fortes e exclusivas</b> e mantenha ativada a
-            <b>autenticação em dois fatores (2FA)</b>.
-        </p>
-    </div>
-
-</main>
-
-<footer>
-    © Monitoramento Investigativo Digital —  
-    Esta análise reflete o cenário no momento da verificação.
-</footer>
-
-<script>
-function analisar() {
-    const senha = document.getElementById("senha").value;
-    if (!senha) {
+      if (!senha) {
         alert("Digite uma senha para análise.");
         return;
+      }
+
+      resultado.style.display = "block";
+      resultado.innerHTML = `
+        <div class="box info">
+          🔍 Analisando senha em bases públicas conhecidas...
+        </div>
+      `;
+
+      try {
+        const res = await fetch(
+          "https://dpbmonitor-production.up.railway.app/api/verificar",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ senha })
+          }
+        );
+
+        const data = await res.json();
+
+        if (data.status === "vazada") {
+          resultado.innerHTML = `
+            <div class="box critico">
+              ⚠️ <strong>Senha encontrada em vazamentos</strong><br><br>
+              Ocorrências registradas: <strong>${data.ocorrencias}</strong><br>
+              Fonte: ${data.fonte}
+            </div>
+
+            <div class="box info">
+              🔐 <strong>Recomendação:</strong><br>
+              Altere imediatamente esta senha em todos os serviços onde ela
+              possa ter sido utilizada e evite reutilização.
+            </div>
+          `;
+        }
+        else if (data.status === "nao_encontrada") {
+          resultado.innerHTML = `
+            <div class="box ok">
+              ✅ <strong>Nenhuma ocorrência encontrada</strong><br><br>
+              A senha não foi identificada em bases públicas conhecidas
+              até o momento da verificação.
+            </div>
+
+            <div class="box info">
+              ℹ️ <strong>Atenção:</strong><br>
+              A ausência em bases públicas não garante risco zero.
+              Vazamentos podem circular de forma restrita ou privada
+              antes de se tornarem públicos.
+              <br><br>
+              Recomenda-se a troca periódica da senha a cada
+              <strong>3 a 6 meses</strong>, especialmente em serviços sensíveis.
+            </div>
+          `;
+        }
+        else {
+          resultado.innerHTML = `
+            <div class="box critico">
+              ❌ Erro inesperado durante a verificação.
+            </div>
+          `;
+        }
+
+      } catch (e) {
+        resultado.innerHTML = `
+          <div class="box critico">
+            ❌ Não foi possível conectar ao servidor de verificação.
+          </div>
+        `;
+      }
     }
-
-    // Simulação (backend virá depois)
-    const vazada = false;
-
-    document.getElementById("resultadoSeguro").style.display = vazada ? "none" : "block";
-    document.getElementById("resultadoAlerta").style.display = vazada ? "block" : "none";
-    document.getElementById("recomendacoes").style.display = "block";
-}
-</script>
+  </script>
 
 </body>
 </html>
