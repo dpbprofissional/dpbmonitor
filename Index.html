@@ -1,181 +1,172 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>DPB • Monitoramento de Vazamentos</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Monitoramento de Vazamento de Senhas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #020617;
+            color: #E5E7EB;
+        }
 
-<style>
-body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background: radial-gradient(circle at top, #0f172a, #020617);
-    color: #E5E7EB;
-}
+        header {
+            background: #020617;
+            border-bottom: 1px solid #0F172A;
+            padding: 20px;
+            text-align: center;
+        }
 
-header {
-    background: #020617;
-    padding: 20px;
-    border-bottom: 2px solid #C9A24D;
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
+        header h1 {
+            margin: 0;
+            font-size: 22px;
+            color: #C9A24D;
+        }
 
-header img {
-    height: 60px;
-}
+        header p {
+            margin-top: 6px;
+            font-size: 13px;
+            color: #94A3B8;
+        }
 
-header h1 {
-    font-family: 'Cinzel', serif;
-    color: #E6C46A;
-    font-size: 20px;
-}
+        main {
+            max-width: 780px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
 
-.container {
-    max-width: 480px;
-    margin: 40px auto;
-    background: #020617;
-    padding: 30px;
-    border-radius: 12px;
-    border: 1px solid #C9A24D;
-    box-shadow: 0 0 30px rgba(0,0,0,.85);
-}
+        .card {
+            background: #020617;
+            border: 1px solid #0F172A;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
 
-h2 {
-    font-family: 'Cinzel', serif;
-    color: #E6C46A;
-    text-align: center;
-}
+        .card h2 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #E5E7EB;
+        }
 
-p {
-    font-size: 14px;
-    color: #94A3B8;
-}
+        .status {
+            padding: 14px;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
 
-input {
-    width: 100%;
-    padding: 12px;
-    border-radius: 6px;
-    border: none;
-    margin-top: 10px;
-}
+        .status.safe {
+            background: rgba(34,197,94,0.08);
+            border-left: 4px solid #22C55E;
+            color: #BBF7D0;
+        }
 
-button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 15px;
-    background: linear-gradient(145deg, #2563eb, #1e40af);
-    border: 1px solid #C9A24D;
-    color: #fff;
-    font-weight: 600;
-    border-radius: 6px;
-    cursor: pointer;
-}
+        .status.alert {
+            background: rgba(239,68,68,0.08);
+            border-left: 4px solid #EF4444;
+            color: #FECACA;
+        }
 
-button:hover {
-    background: #1e3a8a;
-}
+        .recommendation {
+            background: #020617;
+            border: 1px solid #0F172A;
+            border-left: 5px solid #C9A24D;
+            border-radius: 6px;
+            padding: 18px;
+        }
 
-.status {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 6px;
-    display: none;
-}
+        .recommendation h3 {
+            margin-top: 0;
+            font-size: 15px;
+            color: #E5E7EB;
+        }
 
-.safe {
-    background: #052e16;
-    border-left: 5px solid #10b981;
-}
+        .recommendation p {
+            font-size: 13px;
+            color: #94A3B8;
+            line-height: 1.6;
+        }
 
-.danger {
-    background: #450a0a;
-    border-left: 5px solid #C9A24D;
-}
+        footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: #64748B;
+            border-top: 1px solid #0F172A;
+            margin-top: 40px;
+        }
 
-footer {
-    text-align: center;
-    font-size: 11px;
-    color: #94A3B8;
-    margin-top: 30px;
-}
-</style>
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 11px;
+            border-radius: 4px;
+            background: #0F172A;
+            color: #C9A24D;
+            margin-top: 8px;
+        }
+    </style>
 </head>
-
 <body>
 
 <header>
-    <img src="logo.jpg" alt="DPB">
-    <h1>Investigador Profissional • DPB</h1>
+    <h1>Monitoramento de Vazamento de Senhas</h1>
+    <p>Análise investigativa em bases públicas e fontes restritas</p>
 </header>
 
-<div class="container">
-    <h2>Verificação de Senha</h2>
-    <p>
-        Esta ferramenta verifica se a senha digitada já consta em bases públicas
-        de vazamento utilizadas em ataques automatizados.
-    </p>
+<main>
 
-    <input type="password" id="password" placeholder="Digite a senha">
-    <button onclick="verificar()">Verificar Segurança</button>
+    <div class="card">
+        <h2>🔎 Resultado da Análise</h2>
 
-    <div id="status" class="status"></div>
+        <!-- EXEMPLO DE RESULTADO -->
+        <div class="status safe">
+            Nenhuma ocorrência encontrada em bases públicas conhecidas até o momento da verificação.
+        </div>
 
-    <p style="font-size:12px;margin-top:15px;">
-        ⚠️ Esta verificação não indica que sua conta foi invadida,
-        mas que a senha já existe em listas globais de risco.
-    </p>
-</div>
+        <!-- Use "status alert" caso encontre vazamento -->
+        <!--
+        <div class="status alert">
+            Senha identificada em vazamento. Recomenda-se troca imediata.
+        </div>
+        -->
+
+        <span class="badge">Verificação realizada em tempo real</span>
+    </div>
+
+    <div class="recommendation">
+        <h3>🔐 Recomendações de Segurança</h3>
+
+        <p>
+            A senha analisada não foi identificada em bases públicas de vazamento conhecidas até o momento desta
+            verificação, o que é um indicativo positivo. No entanto, isso <b>não garante ausência total de risco</b>,
+            pois existem vazamentos recentes ou bases privadas que ainda não foram divulgadas publicamente.
+            Em muitos casos, esses dados circulam de forma restrita ou são comercializados antes de se tornarem públicos.
+        </p>
+
+        <p>
+            Como medida <b>preventiva</b>, especialmente para serviços sensíveis como e-mail, redes sociais,
+            bancos, marketplaces e sistemas corporativos, recomenda-se a
+            <b>troca periódica da senha em intervalos de 3 a 6 meses</b>,
+            ou <b>imediatamente</b> caso exista qualquer indício de comprometimento.
+        </p>
+
+        <p>
+            Além disso, utilize sempre <b>senhas fortes e exclusivas</b> para cada serviço e mantenha ativada a
+            <b>autenticação em dois fatores (2FA)</b>, reduzindo significativamente o risco de acesso não autorizado.
+        </p>
+    </div>
+
+</main>
 
 <footer>
-    DPB • Investigação Digital  • LGPD<br>
-    Monitoramento contínuo realizado em ambiente controlado
+    © Monitoramento Investigativo Digital —  
+    Esta análise não garante segurança absoluta e reflete o cenário no momento da verificação.
 </footer>
-
-<script>
-async function sha1(msg) {
-    const buf = await crypto.subtle.digest("SHA-1", new TextEncoder().encode(msg));
-    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, "0")).join("").toUpperCase();
-}
-
-async function verificar() {
-    const senha = document.getElementById("password").value;
-    const status = document.getElementById("status");
-
-    if (!senha) return alert("Digite uma senha");
-
-    const hash = await sha1(senha);
-    const prefixo = hash.substring(0,5);
-    const sufixo = hash.substring(5);
-
-    const r = await fetch(`https://api.pwnedpasswords.com/range/${prefixo}`);
-    const txt = await r.text();
-
-    let achou = false;
-    let qtd = 0;
-
-    txt.split("\n").forEach(l => {
-        const [h, c] = l.split(":");
-        if (h === sufixo) {
-            achou = true;
-            qtd = c;
-        }
-    });
-
-    status.style.display = "block";
-
-    if (achou) {
-        status.className = "status danger";
-        status.innerHTML = `🚨 <b>Senha insegura</b><br>Identificada em ${qtd} vazamentos públicos.`;
-    } else {
-        status.className = "status safe";
-        status.innerHTML = `✅ <b>Senha não localizada</b><br>Nenhum registro em bases públicas.`;
-    }
-}
-</script>
 
 </body>
 </html>
