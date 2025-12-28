@@ -1,116 +1,132 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <title>Monitoramento de Vazamento de Senhas</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<title>Monitoramento de Vazamento de Senhas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #020617;
-            color: #E5E7EB;
-        }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #020617;
+    color: #E5E7EB;
+}
 
-        header {
-            background: #020617;
-            border-bottom: 1px solid #0F172A;
-            padding: 20px;
-            text-align: center;
-        }
+header {
+    text-align: center;
+    padding: 30px 15px;
+    border-bottom: 1px solid #0F172A;
+}
 
-        header h1 {
-            margin: 0;
-            font-size: 22px;
-            color: #C9A24D;
-        }
+header h1 {
+    margin: 0;
+    color: #C9A24D;
+    font-size: 22px;
+}
 
-        header p {
-            margin-top: 6px;
-            font-size: 13px;
-            color: #94A3B8;
-        }
+header p {
+    margin-top: 8px;
+    color: #94A3B8;
+    font-size: 13px;
+}
 
-        main {
-            max-width: 780px;
-            margin: 30px auto;
-            padding: 0 15px;
-        }
+main {
+    max-width: 720px;
+    margin: 30px auto;
+    padding: 0 15px;
+}
 
-        .card {
-            background: #020617;
-            border: 1px solid #0F172A;
-            border-radius: 6px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
+.card {
+    background: #020617;
+    border: 1px solid #0F172A;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
 
-        .card h2 {
-            margin-top: 0;
-            font-size: 16px;
-            color: #E5E7EB;
-        }
+label {
+    font-size: 13px;
+    color: #94A3B8;
+}
 
-        .status {
-            padding: 14px;
-            border-radius: 6px;
-            font-size: 14px;
-            margin-top: 10px;
-        }
+input[type="password"] {
+    width: 100%;
+    margin-top: 8px;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #0F172A;
+    background: #020617;
+    color: #E5E7EB;
+    font-size: 14px;
+}
 
-        .status.safe {
-            background: rgba(34,197,94,0.08);
-            border-left: 4px solid #22C55E;
-            color: #BBF7D0;
-        }
+button {
+    width: 100%;
+    margin-top: 15px;
+    padding: 12px;
+    background: #C9A24D;
+    color: #020617;
+    border: none;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-        .status.alert {
-            background: rgba(239,68,68,0.08);
-            border-left: 4px solid #EF4444;
-            color: #FECACA;
-        }
+button:hover {
+    opacity: 0.9;
+}
 
-        .recommendation {
-            background: #020617;
-            border: 1px solid #0F172A;
-            border-left: 5px solid #C9A24D;
-            border-radius: 6px;
-            padding: 18px;
-        }
+.status {
+    display: none;
+    margin-top: 15px;
+    padding: 14px;
+    border-radius: 6px;
+    font-size: 14px;
+}
 
-        .recommendation h3 {
-            margin-top: 0;
-            font-size: 15px;
-            color: #E5E7EB;
-        }
+.safe {
+    background: rgba(34,197,94,0.08);
+    border-left: 4px solid #22C55E;
+    color: #BBF7D0;
+}
 
-        .recommendation p {
-            font-size: 13px;
-            color: #94A3B8;
-            line-height: 1.6;
-        }
+.alert {
+    background: rgba(239,68,68,0.08);
+    border-left: 4px solid #EF4444;
+    color: #FECACA;
+}
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            font-size: 12px;
-            color: #64748B;
-            border-top: 1px solid #0F172A;
-            margin-top: 40px;
-        }
+.recommendation {
+    display: none;
+    background: #020617;
+    border: 1px solid #0F172A;
+    border-left: 5px solid #C9A24D;
+    border-radius: 8px;
+    padding: 18px;
+}
 
-        .badge {
-            display: inline-block;
-            padding: 4px 8px;
-            font-size: 11px;
-            border-radius: 4px;
-            background: #0F172A;
-            color: #C9A24D;
-            margin-top: 8px;
-        }
-    </style>
+.recommendation h3 {
+    margin-top: 0;
+    font-size: 15px;
+}
+
+.recommendation p {
+    font-size: 13px;
+    color: #94A3B8;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 12px;
+    color: #64748B;
+    border-top: 1px solid #0F172A;
+}
+</style>
 </head>
+
 <body>
 
 <header>
@@ -120,44 +136,40 @@
 
 <main>
 
+    <!-- ENTRADA -->
     <div class="card">
-        <h2>🔎 Resultado da Análise</h2>
+        <label for="senha">Digite a senha para análise:</label>
+        <input type="password" id="senha" placeholder="Digite a senha aqui">
+        <button onclick="analisar()">Analisar senha</button>
 
-        <!-- EXEMPLO DE RESULTADO -->
-        <div class="status safe">
+        <div id="resultadoSeguro" class="status safe">
             Nenhuma ocorrência encontrada em bases públicas conhecidas até o momento da verificação.
         </div>
 
-        <!-- Use "status alert" caso encontre vazamento -->
-        <!--
-        <div class="status alert">
+        <div id="resultadoAlerta" class="status alert">
             Senha identificada em vazamento. Recomenda-se troca imediata.
         </div>
-        -->
-
-        <span class="badge">Verificação realizada em tempo real</span>
     </div>
 
-    <div class="recommendation">
+    <!-- RECOMENDAÇÕES -->
+    <div id="recomendacoes" class="recommendation">
         <h3>🔐 Recomendações de Segurança</h3>
 
         <p>
             A senha analisada não foi identificada em bases públicas de vazamento conhecidas até o momento desta
-            verificação, o que é um indicativo positivo. No entanto, isso <b>não garante ausência total de risco</b>,
-            pois existem vazamentos recentes ou bases privadas que ainda não foram divulgadas publicamente.
-            Em muitos casos, esses dados circulam de forma restrita ou são comercializados antes de se tornarem públicos.
+            verificação. No entanto, isso <b>não garante ausência total de risco</b>, pois existem vazamentos recentes
+            ou bases privadas ainda não divulgadas publicamente.
         </p>
 
         <p>
             Como medida <b>preventiva</b>, especialmente para serviços sensíveis como e-mail, redes sociais,
-            bancos, marketplaces e sistemas corporativos, recomenda-se a
-            <b>troca periódica da senha em intervalos de 3 a 6 meses</b>,
-            ou <b>imediatamente</b> caso exista qualquer indício de comprometimento.
+            bancos e sistemas corporativos, recomenda-se a <b>troca periódica da senha em intervalos de 3 a 6 meses</b>,
+            ou <b>imediatamente</b> em caso de suspeita de comprometimento.
         </p>
 
         <p>
-            Além disso, utilize sempre <b>senhas fortes e exclusivas</b> para cada serviço e mantenha ativada a
-            <b>autenticação em dois fatores (2FA)</b>, reduzindo significativamente o risco de acesso não autorizado.
+            Utilize sempre <b>senhas fortes e exclusivas</b> e mantenha ativada a
+            <b>autenticação em dois fatores (2FA)</b>.
         </p>
     </div>
 
@@ -165,8 +177,25 @@
 
 <footer>
     © Monitoramento Investigativo Digital —  
-    Esta análise não garante segurança absoluta e reflete o cenário no momento da verificação.
+    Esta análise reflete o cenário no momento da verificação.
 </footer>
+
+<script>
+function analisar() {
+    const senha = document.getElementById("senha").value;
+    if (!senha) {
+        alert("Digite uma senha para análise.");
+        return;
+    }
+
+    // Simulação (backend virá depois)
+    const vazada = false;
+
+    document.getElementById("resultadoSeguro").style.display = vazada ? "none" : "block";
+    document.getElementById("resultadoAlerta").style.display = vazada ? "block" : "none";
+    document.getElementById("recomendacoes").style.display = "block";
+}
+</script>
 
 </body>
 </html>
