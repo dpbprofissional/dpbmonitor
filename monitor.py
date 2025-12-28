@@ -5,7 +5,8 @@ import hashlib
 import os
 
 app = Flask(__name__)
-CORS(app)  # <<< ISSO RESOLVE
+CORS(app)
+
 def sha1_hash(senha):
     return hashlib.sha1(senha.encode()).hexdigest().upper()
 
@@ -29,22 +30,14 @@ def verificar():
     if r.status_code != 200:
         return jsonify({"status": "erro"})
 
-    vazada = False
-    vezes = 0
-
     for linha in r.text.splitlines():
         h, count = linha.split(":")
         if h == suffix:
-            vazada = True
-            vezes = int(count)
-            break
-
-    if vazada:
-        return jsonify({
-            "status": "vazada",
-            "ocorrencias": vezes,
-            "fonte": "bases públicas conhecidas"
-        })
+            return jsonify({
+                "status": "vazada",
+                "ocorrencias": int(count),
+                "fonte": "bases públicas conhecidas"
+            })
 
     return jsonify({
         "status": "nao_encontrada"
