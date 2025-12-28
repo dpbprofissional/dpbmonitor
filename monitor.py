@@ -1,10 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import requests
 import hashlib
 import os
 
 app = Flask(__name__)
-
+CORS(app)  # <<< ISSO RESOLVE
 def sha1_hash(senha):
     return hashlib.sha1(senha.encode()).hexdigest().upper()
 
